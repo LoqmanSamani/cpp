@@ -4,7 +4,7 @@ int main(){
     // to write a comment you should  use two slashes and the compiler ignors the comment :)
     /*
     for multiline comments like docstrings in python, 
-    a slash and astrix followed by comment and at the 
+    a slash and asterisk followed by comment and at the 
     end astrix and slash to end the multiline comment.
     */
     std::cout << "Hello World!" << std::endl;
