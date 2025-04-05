@@ -11,6 +11,7 @@ class Student{
         std::string first_name;
         std::string last_name;
         std::string id;
+        std::string major;
         char gender; // m: male, f:female, d: diverse
         std::string email;
         int phone_num;
@@ -20,12 +21,13 @@ class Student{
         
 
         Student(
-            std::string first_name, std::string last_name, std::string id, char gender, int age, std::string email = " ",
+            std::string first_name, std::string last_name, std::string id, std::string major, char gender, int age, std::string email = " ",
             std::string address = " ", int phone_num = 0, std::map<std::string, int> courses_grades = {}
         ){
             this -> first_name = first_name;
             this -> last_name = last_name;
             this -> id = id;
+            this -> major = major;
             this -> gender = gender;
             this -> age = age;
             this -> email = email;
@@ -39,15 +41,16 @@ class Student{
             std::cout << "-                                      Student Management Information                                      -" << std::endl;
             std::cout << "-                         To add a new student the following information is needed                         -" << std::endl;
             std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
-            std::cout << "- 1. first_name (string): first name of the student                                                        -"<< std::endl;
-            std::cout << "- 2. last_name (string): last name of the student                                                          -" << std::endl;
-            std::cout << "- 3. id (string): student id. e.g., st186432                                                               -" << std::endl;
-            std::cout << "- 4. gender (char): student gender (m: male, f: female and d: diverse)                                     -" << std::endl;
-            std::cout << "- 5. age (int): student age in year                                                                        -" << std::endl;
-            std::cout << "- 6. email (string, opt): email address of the studnet                                                     -" << std::endl;
-            std::cout << "- 7. address (string, opt): address. e.g., 205 E Webster St.                                               -" << std::endl;
-            std::cout << "- 8. phone_num (int, opt): phone number of the student                                                     -" << std::endl;
-            std::cout << "- 8. courses_grades (dict, opt): a map which allignes each course(key, string) to its grade(value, int)    -" << std::endl;
+            std::cout << "- 1. first_name (str): first name of the student                                                           -" << std::endl;
+            std::cout << "- 2. last_name (str): last name of the student                                                             -" << std::endl;
+            std::cout << "- 3. id (str): student id. e.g., st186432                                                                  -" << std::endl;
+            std::cout << "- 4. major (str): study major                                                                              -" << std::endl;
+            std::cout << "- 5. gender (char): student gender (m: male, f: female and d: diverse)                                     -" << std::endl;
+            std::cout << "- 6. age (int): student age in year                                                                        -" << std::endl;
+            std::cout << "- 7. email (str, opt): email address of the studnet                                                        -" << std::endl;
+            std::cout << "- 8. address (str, opt): address. e.g., 205 E Webster St.                                                  -" << std::endl;
+            std::cout << "- 9. phone_num (int, opt): phone number of the student                                                     -" << std::endl;
+            std::cout << "-10. courses_grades (map, opt): a map which allignes each course(key, val) to its grade(str, int)          -" << std::endl;
             std::cout << "------------------------------------------------------------------------------------------------------------" << std::endl;
     
         }
@@ -86,7 +89,7 @@ class Student{
             }
         
             
-            std::string data = first_name + "," + last_name + "," + id + "," + gender + "," +
+            std::string data = first_name + "," + last_name + "," + id + "," + major + "," + gender + "," +
                                std::to_string(age) + "," + email + "," + address + "," +
                                std::to_string(phone_num) + ",";
         
@@ -100,7 +103,7 @@ class Student{
 
         void store_info(const std::string& student_data){
 
-            std::ofstream file("students.csv", std::ios::app); // create if does not exist.
+            std::ofstream file("stds.csv", std::ios::app); // create if does not exist.
             if(file.is_open()){
                 file << student_data << std::endl;
                 file.close();
@@ -108,6 +111,6 @@ class Student{
             }else{
                 std::cerr << "Error: could not open or create the data bank!!!" << std::endl;
             }
-        }       
+        } 
 
 };
