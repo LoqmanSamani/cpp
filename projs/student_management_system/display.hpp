@@ -11,6 +11,8 @@
 
 
 
+
+
 class Display {
     //private:
         //bool found_by_name;
@@ -49,44 +51,52 @@ class Display {
 
         // retrieve student data by ID or full name
         std::string retrive_data(std::string id = "", std::string first_name = "", std::string last_name = "") {
-
             std::ifstream st_file("stds.csv");
             std::string line, data;
             if (!st_file.is_open()) {
                 std::cerr << "Could not open stds.csv\n";
                 return "";
             }
-            if (id.empty()){
+            if (id.empty()) {
                 found_by_name = true;
-            }else{
+            } else {
                 found_by_name = false;
             }
-
+        
+            int line_index = 0; // Track line number
             while (std::getline(st_file, line)) {
                 std::vector<std::string> values;
                 std::stringstream ss(line);
                 std::string val;
-
+        
                 while (std::getline(ss, val, ',')) {
                     values.push_back(val);
                 }
-
-                if (values.size() < 3) continue;  // invalid line
-
+        
+                if (values.size() < 3) {
+                    line_index++;
+                    continue; // invalid line
+                }
+        
                 std::string line_id = trim(values[2]);
                 std::string line_first = trim(values[0]);
                 std::string line_last = trim(values[1]);
-
+        
                 if (!id.empty()) {
-                    check(id); // to store the index
-                    if (line_id == trim(id)) return line;
+                    if (line_id == trim(id)) {
+                        index = line_index; // Set index to the matching line
+                        st_file.close();
+                        return line;
+                    }
                 } else if (!first_name.empty() && !last_name.empty()) {
                     if (line_first == trim(first_name) && line_last == trim(last_name)) {
                         data += line + "|";
                     }
                 }
+                line_index++;
             }
-
+        
+            st_file.close();
             return data;
         }
 
@@ -194,4 +204,3 @@ class Display {
         }       
         
 };
-
