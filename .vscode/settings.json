@@ -51,6 +51,8 @@
         "map": "cpp",
         "fstream": "cpp",
         "bitset": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "codecvt": "cpp",
+        "ratio": "cpp"
     }
 }
