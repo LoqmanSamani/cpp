@@ -385,8 +385,5 @@ class Book {
             size_t last = str.find_last_not_of(' ');
             return str.substr(first, (last - first + 1));
         }
-        bool string_to_bool(const std::string& str) {
-            return std::stoi(str) != 0;
-        }
 
 };
