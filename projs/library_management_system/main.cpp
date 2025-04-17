@@ -5,15 +5,13 @@
 #include "book.hpp"
 #include "borrow.hpp"
 
-
-
-
 int main() {
     try {
-        
-        //std::ofstream("users.csv").close();
-        //std::ofstream("books.csv").close();
-        //std::ofstream("borrows.csv").close();
+        // Clear CSV files to ensure a clean slate for testing
+        // Comment out if you want to preserve existing data
+        std::ofstream("users.csv").close();
+        std::ofstream("books.csv").close();
+        std::ofstream("borrows.csv").close();
 
         // -----------------------------------
         // Test 1: Add a User
@@ -87,20 +85,14 @@ int main() {
         // -----------------------------------
         std::cout << "\n=== Test 6: Borrowing a Book ===\n";
         borrow.borrow("123434532", "112223455");
-        // Output should be:
-        // Borrow database updated!
-        // The book with title: 1984 and ISBN: 123434532 is successfully borrowed to user with ID: 112223455 until [due date]
 
         // -----------------------------------
         // Test 7: Return Book (On Time)
         // Purpose: Test returning a book before due date
         // Expected: Borrow record removed, availability set to 1, "on time" message
-        // Note: Assumes current date is before due date (e.g., 2025-04-16 < 2025-04-30)
         // -----------------------------------
         std::cout << "\n=== Test 7: Returning a Book (On Time) ===\n";
         borrow.return_book("123434532", "112223455");
-        // Output should be:
-        // Book with title: 1984 and ISBN: 123434532 returned by user with ID: 112223455. Congrats! You are on time!
 
         // -----------------------------------
         // Test 8: Borrow Again for Late Return
@@ -111,17 +103,43 @@ int main() {
         borrow.borrow("123434532", "112223455");
 
         // -----------------------------------
+        // Test 8.5: Set Past Due Date
+        // Purpose: Modify borrows.csv to set a past due date for Test 9
+        // Expected: borrows.csv updated with due date 2025-04-10
+        // -----------------------------------
+        std::cout << "\n=== Test 8.5: Setting Past Due Date for Late Return ===\n";
+        {
+            std::ifstream borr_in("borrows.csv");
+            std::ofstream borr_out("temp_borrows.csv");
+            std::string line;
+            while (std::getline(borr_in, line)) {
+                std::vector<std::string> record;
+                std::stringstream ss(line);
+                std::string item;
+                while (std::getline(ss, item, '|')) {
+                    record.push_back(item);
+                }
+                if (record.size() >= 4 && record[1] == "123434532") {
+                    record[3] = "2025-04-10"; // Set past due date
+                    borr_out << record[0] << "|" << record[1] << "|" << record[2] << "|" << record[3] << "\n";
+                } else {
+                    borr_out << line << "\n";
+                }
+            }
+            borr_in.close();
+            borr_out.close();
+            std::filesystem::remove("borrows.csv");
+            std::filesystem::rename("temp_borrows.csv", "borrows.csv");
+            std::cout << "borrows.csv updated with due date 2025-04-10 for ISBN 123434532.\n";
+        }
+
+        // -----------------------------------
         // Test 9: Return Book (Late)
         // Purpose: Test returning a book after due date
         // Expected: Borrow record removed, availability set to 1, fine calculated
-        // Note: Manually edit borrows.csv to set due date to past (e.g., 2025-04-10)
-        //       or adjust system date for testing
         // -----------------------------------
         std::cout << "\n=== Test 9: Returning a Book (Late) ===\n";
-        std::cout << "Note: For this test, ensure borrows.csv has a due date in the past (e.g., 2025-04-10).\n";
         borrow.return_book("123434532", "112223455");
-        // Output depends on days late, e.g., if 2 days late:
-        // Book with title: 1984 and ISBN: 123434532 returned by user with ID: 112223455. You are late! Please pay $0.50 to the library!
 
         // -----------------------------------
         // Test 10: Delete User
@@ -162,8 +180,10 @@ int main() {
         // Expected: Exception thrown, error message displayed
         // -----------------------------------
         std::cout << "\n=== Test 13: Returning Non-Existent Borrow ===\n";
+        User new_user("999999999", "Jane", "Smith", "25", "female", "jane.smith@gmail.com", "987654321");
+        new_user.add_user();
         try {
-            borrow.return_book("123434532", "112223455");
+            borrow.return_book("123434532", "999999999");
             std::cout << "Test 13 failed: Should have thrown an error!\n";
         } catch (const std::exception& e) {
             std::cout << "Expected error caught: " << e.what() << "\n";
