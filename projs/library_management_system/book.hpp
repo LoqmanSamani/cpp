@@ -1,3 +1,8 @@
+#ifndef BOOK_HPP
+#define BOOK_HPP
+
+
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -70,8 +75,12 @@ class Book {
                 std::cout << "The book with ISBN: " << isbn << " is successfully updated!" << std::endl;
             }
         }
+        bool isbn_check(const std::string& isbn) {
+            return find_index(isbn) != -1;
+        }
         
     private:
+    
         bool update_book_(int idx) {
             std::ifstream file("books.csv");
             if (!file.is_open()) {
@@ -374,10 +383,6 @@ class Book {
             file.close();
             return -1;
         }
-    
-        bool isbn_check(const std::string& isbn) {
-            return find_index(isbn) != -1;
-        }
 
         std::string trim(const std::string& str) {
             size_t first = str.find_first_not_of(' ');
@@ -387,3 +392,6 @@ class Book {
         }
 
 };
+
+
+#endif // BOOK_HPP

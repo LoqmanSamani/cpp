@@ -1,3 +1,8 @@
+#ifndef USER_HPP
+#define USER_HPP
+
+
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -84,6 +89,12 @@ class User {
             } else {
                 throw std::runtime_error(error);
             }
+        }
+        int id_check(const std::string& id){
+
+            int index = find_index(id);
+            if (index == -1 || index == -2) return 0; // ID is unique (file missing or no match)
+            return 1; // ID exists
         }
 
     private:
@@ -266,13 +277,6 @@ class User {
             return -1;
         }
     
-        int id_check(const std::string& id){
-
-            int index = find_index(id);
-            if (index == -1 || index == -2) return 0; // ID is unique (file missing or no match)
-            return 1; // ID exists
-        }
-    
         void store_user(std::string& data){
 
             std::ofstream users("users.csv", std::ios::app);
@@ -291,4 +295,7 @@ class User {
             size_t last = str.find_last_not_of(' ');
             return str.substr(first, (last - first + 1));
         }
-    };
+};
+
+
+#endif // USER_HPP
